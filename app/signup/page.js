@@ -1,14 +1,20 @@
 'use client';
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function SignUp() {
 
-    const { register, handleSubmit, formState: { errors} } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const [ disable, setDisable ] = useState(false);
 
     const onSubmit = async ( data ) => {
+
+        setDisable(true);
+
         const response = await fetch(
-            'api/hello',
+            'api/registration',
             {
                 method: 'POST',
                 headers: {
@@ -18,6 +24,8 @@ export default function SignUp() {
             }
         )
         console.log(await response.json());
+
+        setDisable(false);
     }
 
     return (
@@ -41,7 +49,7 @@ export default function SignUp() {
                                     id="frm_first_name" 
                                     type="text" 
                                     placeholder="Enter your first name"
-                                    {...register("first_name", { required: true})} 
+                                    {...register("first_name", { required: true })} 
                                 />
                             </div>
                             <div className="w-full md:w-1/2 px-3">
@@ -72,7 +80,7 @@ export default function SignUp() {
                                     id="frm_email_address" 
                                     type="email" 
                                     placeholder="Enter your email address"
-                                    {...register("email", {required:true})} 
+                                    {...register("email", { required:true })} 
                                 />
                             </div>
                         </div>
@@ -89,12 +97,12 @@ export default function SignUp() {
                                     id="frm_password" 
                                     type="password"
                                     placeholder="Enter your password"
-                                    {...register("password", {required:true})}
+                                    {...register("password", { required:true })}
                                 />
                             </div>
                         </div>
-                        <button className="bg-teal-500 hover:bg-teal-700 border-teal-500 text-sm hover:border-teal-700 border-4 text-white py-1 px-2 rounded w-full" type="submit">
-                            Create a free account for business
+                        <button disabled={disable} className="bg-teal-500 hover:bg-teal-700 border-teal-500 text-sm hover:border-teal-700 border-4 text-white py-1 px-2 rounded w-full" type="submit">
+                            { disable === true ? 'Submitting...' : 'Create a free account for business' } 
                         </button>
                     </form>
                 </div>
